@@ -31,6 +31,14 @@
         $primerValor = $_GET['x'] ?? 2;
         $segundoValor = $_GET['y'] ?? 1;
         echo "El resultado es: " . $primerValor * $segundoValor;
+
+        //Ejemplo recorrer arrays
+        $meteors = array{
+            'Hoba' => 60000000,
+            'Cape York' => 58200000,
+            'Campo del Cielo' => 50000000,
+            
+        }
     ?>
     <br>
     <?= $parrafo ?>
