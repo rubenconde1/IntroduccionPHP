@@ -50,7 +50,8 @@
     
     if (str_contains(strtolower($nombre), 'a')) {
         echo stripos(strtolower($nombre),'a');
-    } else echo $nombre . " no contiene una a";
+    } else 
+        echo "No contiene una a";
 ?>
 
 <br>
