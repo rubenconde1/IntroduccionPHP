@@ -1,8 +1,8 @@
 <!-- Recorrer array -->
 
 <?php
-// Ejercicio 1
-$colores = array('negro', 'blaco', 'amarillo', 'rojo', 'verde', 'azul');
+
+$colores = array('negro', 'blanco', 'amarillo', 'rojo', 'verde', 'azul');
 $listado = '';
 
 $listado .= '<ul>';
