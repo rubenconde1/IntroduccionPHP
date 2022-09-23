@@ -5,10 +5,10 @@
 
     uasort($array, 
     function ($a, $b){
-        if ($a == $b){
+        if (strlen($a) == strlen($b)){
             return 0;
         } else {
-            return ($a < $b) ? -1 : 1;
+            return (strlen($a) < strlen($b)) ? -1 : 1;
         }
     });
 
