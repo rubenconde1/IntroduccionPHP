@@ -3,10 +3,14 @@
 <?php
 $array = ['Hola', 'mundo', 'bienvenido', 'a', 'tu', 'primer', 'partlist'];
     function partlist($array){
-        for ($i=0; $i < count($array); $i++) { 
-            $separado = array_slice($array, 0, $i);
+        $cadena =[];
+        for ($i=1; $i <= count($array); $i++) { 
+            print_r($cadena = array_slice($array, 0, $i));
+            echo "<br>";
+            print_r($cadena2 = array_slice($array, $i));
+            echo "<br>";
         }
     }
 
-    print_r(partlist($array));
+    partlist($array);
 ?>
