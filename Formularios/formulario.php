@@ -7,7 +7,7 @@
     <title>Document</title>
 </head>
 <body>
-    <form action="formpost.php" method="post">
+    <form action="formpost.php" method="POST" enctype="multipart/form-data">
         Nombre:
         <input type="text" name="nombre" maxlength="50"><br>
         Correo:
@@ -23,17 +23,8 @@
             <option value="universidad">Universidad</option>
         </select><br>
         Avatar:
-        <input type="file" name="imagen"/>
+        <input type="file" name="imagen">
         <input type="submit" name="submit" value="Enviar">
     </form>
 </body>
 </html>
-
-<?php
-function filtrado($datos){
-    $datos = trim($datos);
-    $datos = stripslashes($datos);
-    $datos = htmlspecialchars($datos);
-    return $datos;
-}
-?>
