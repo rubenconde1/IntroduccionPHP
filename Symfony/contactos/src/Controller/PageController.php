@@ -22,6 +22,6 @@ class PageController extends AbstractController
 
     public function inicio(): Response
     {
-        return new Response("Bienvenido a la web de contactos");
+        return $this->render('inicio.html.twig');
     }
 }
