@@ -1,20 +1,23 @@
 <?php
 namespace App\Controller;
 
+use Doctrine\Persistence\ManagerRegistry;
 use Symfony\Component\Routing\Annotation\Route;
 use Symfony\Bundle\FrameworkBundle\Controller\AbstractController;
 use Symfony\Component\HttpFoundation\Response;
+use App\Entity\Contacto;
 
     class ContactoController extends AbstractController{
         /**
          * @Route("/contacto/{codigo<\d+>?1}", name="ficha_contacto")
          */
 
-         public function ficha($codigo): Response {
-            $resultado = ($this -> contactos[$codigo] ?? null);
+         public function ficha(ManagerRegistry $doctrine, $codigo): Response {
+            $repositorio = $doctrine->getRepository(Contacto::class);
+            $contacto = $repositorio->find($codigo);
 
                 return $this->render('ficha_contacto.html.twig', [
-                        'contacto' => $resultado
+                        'contacto' => $contacto
                     ]);
          }
 
@@ -26,20 +29,40 @@ use Symfony\Component\HttpFoundation\Response;
             9 => ["nombre" => "Nora Jover", "telefono" => "54565859", "email" => "norajover@ieselcaminas.org"]
          ];
 
+         /**
+          * @Route("/contacto/insertar", name="insertar_contacto")
+          */
+         public function insertar(ManagerRegistry $doctrine) {
+            $entityManager = $doctrine->getManager();
+            foreach ($this->contactos as $c) {
+                $contacto = new Contacto();
+                $contacto->setNombre($c["nombre"]);
+                $contacto->setTelefono($c["telefono"]);
+                $contacto->setEmail($c["email"]);
+                $entityManager->persist($contacto);
+            }
+
+            try {
+                $entityManager->flush();
+                return new Response("Contactos insertados");
+            } catch (\Exception $e) {
+                return new Response("Error insertando objetos");
+            }
+         }
+
+
+
         /**
          * @Route("/contacto/buscar/{texto}", name="buscar_contacto")
          */
 
-         public function buscar($texto): Response {
-            $resultados = array_filter($this->contactos,
-            function ($contacto) use ($texto){
-                return strpos($contacto["nombre"], $texto) !== FALSE;
-            }
-        );
+         public function buscar(ManagerRegistry $doctrine, $texto): Response {
+            $repositorio = $doctrine->getRepository(Contacto::class);
+            $contactos = $repositorio->findByName($texto);
 
-        return $this->render('lista_contactos.html.twig', [
-            'contactos' => $resultados
-        ]);
+            return $this->render('lista_contactos.html.twig', [
+                'contactos' => $contactos
+            ]);
          }
     }
 ?>
