@@ -88,5 +88,24 @@ use App\Entity\Contacto;
                 ]);
             }
         }
+
+        public function delete(ManagerRegistry $doctrine, $id): Response{
+            $entityManager = $doctrine->getManager();
+            $repositorio = $doctrine->getRepository(Contacto::class);
+            $contacto = $repositorio->find($id);
+            if ($contacto) {
+                try {
+                    $entityManager->remove($contacto);
+                    $entityManager->flush();
+                    return new Response("Contacto eliminado");
+                } catch (\Exception $e) {
+                    return new Response("Error eliminado objeto");
+                }
+            } else {
+                return $this->render('ficha_contacto.html.twig', [
+                    'contacto' => null
+                ]);
+            }
+        }
     }
 ?>
