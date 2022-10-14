@@ -7,6 +7,11 @@ use Symfony\Bundle\FrameworkBundle\Controller\AbstractController;
 use Symfony\Component\HttpFoundation\Response;
 use App\Entity\Contacto;
 use App\Entity\Provincia;
+use Symfony\Bridge\Doctrine\Form\Type\EntityType;
+use Symfony\Component\BrowserKit\Request;
+use Symfony\Component\Form\Extension\Core\Type\EmailType;
+use Symfony\Component\Form\Extension\Core\Type\TextType;
+use Symfony\Component\Form\Extension\Core\Type\SubmitType;
 
     class ContactoController extends AbstractController{
         /**
@@ -157,6 +162,36 @@ use App\Entity\Provincia;
             return $this->render('ficha_contacto.html.twig', [
                 'contacto' => $contacto
             ]);
-         }
+        }
+
+        /**
+         * @Route("/contacto/nuevo", name="nuevo_contacto")
+         */
+        public function nuevo(ManagerRegistry $doctrine, Request $request){
+            $contacto = new Contacto();
+
+            $formulario = $this->createFormBuilder($contacto)
+                ->add('nombre', TextType::class)
+                ->add('telefono', TextType::class)
+                ->add('email', EmailType::class, array('label' => 'Correo electrónico'))
+                ->add('provincia', EntityType::class, array(
+                    'class' => Provincia::class,
+                    'choice_label' => 'nombre',))
+                ->add('save', SubmitType::class, array('label' => 'Enviar'))
+                ->getForm();
+                $formulario->handleRequest($request);
+
+                if ($formulario->isSubmitted() && $formulario->isValid()) {
+                    $contacto = $formulario->getData();
+                    $entityManager = $doctrine->getManager();
+                    $entityManager->persist($contacto);
+                    $entityManager->flush();
+                    return $this->redirectToRoute('ficha_contacto', ["codigo" => $contacto->getId()]);
+                }
+
+            return $this->render('nuevo.html.twig', array(
+                'formulario' => $formulario->createView()
+            ));
+        }
     }
 ?>
