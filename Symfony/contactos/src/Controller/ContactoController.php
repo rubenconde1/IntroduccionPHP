@@ -83,9 +83,10 @@ use App\Entity\Contacto;
                     return new Response('Error insertando objetos');
                 }
             } else {
-                return $this->render('ficha_contacto.html.twig'), [
+                return $this->render('ficha_contacto.html.twig', [
                     'contacto' => null
-                ]};
-          }
+                ]);
+            }
+        }
     }
 ?>
