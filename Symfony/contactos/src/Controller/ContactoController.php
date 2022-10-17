@@ -193,5 +193,35 @@ use Symfony\Component\Form\Extension\Core\Type\SubmitType;
                 'formulario' => $formulario->createView()
             ));
         }
+
+        /**
+         * @Route("/contacto/editar/{codigo}", name="editar_contacto", requirements={"codigo"="\d+"})
+         */
+        public function editar(ManagerRegistry $doctrine, Request $request, $codigo) {
+            $repositorio = $doctrine->getRepository(Contacto::class);
+            $contacto = $repositorio->find($codigo);
+
+            $formulario = $this->createFormBuilder($contacto)
+                ->add('nombre', TextType::class)
+                ->add('telefono', TextType::class)
+                ->add('email', EmailType::class, array('label' => 'Correo electrónico'))
+                ->add('provincia', EntityType::class, array(
+                    'class' => Provincia::class,
+                    'choice_label' => 'nombre',))
+                ->add('save', SubmitType::class, array('label' => 'Enviar'))
+                ->getForm();
+
+            $formulario->handleRequest($request);
+
+            if ($formulario->isSubmitted() && $formulario->isValid()) {
+                $contacto = $formulario->getData();
+                $entityManager = $doctrine->getManager();
+                $entityManager->persist($contacto);
+                $entityManager->flush();
+            }
+            return $this->render('editar.html.twig', array(
+                'formulario' => $formulario->createView()
+            ));
+        }
     }
 ?>
