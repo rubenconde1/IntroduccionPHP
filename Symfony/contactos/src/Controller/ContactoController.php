@@ -8,7 +8,7 @@ use Symfony\Component\HttpFoundation\Response;
 use App\Entity\Contacto;
 use App\Entity\Provincia;
 use Symfony\Bridge\Doctrine\Form\Type\EntityType;
-use Symfony\Component\BrowserKit\Request;
+use Symfony\Component\HttpFoundation\Request;
 use Symfony\Component\Form\Extension\Core\Type\EmailType;
 use Symfony\Component\Form\Extension\Core\Type\TextType;
 use Symfony\Component\Form\Extension\Core\Type\SubmitType;
@@ -122,7 +122,7 @@ use Symfony\Component\Form\Extension\Core\Type\SubmitType;
             $entityManager = $doctrine->getManager();
             $provincia = new Provincia();
 
-            $provincia->setNombre("Alicate");
+            $provincia->setNombre("Alicante");
             $contacto = new Contacto();
 
             $contacto->setNombre("Inserción de prueba con provincia");
