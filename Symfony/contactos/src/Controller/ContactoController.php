@@ -12,6 +12,7 @@ use Symfony\Component\HttpFoundation\Request;
 use Symfony\Component\Form\Extension\Core\Type\EmailType;
 use Symfony\Component\Form\Extension\Core\Type\TextType;
 use Symfony\Component\Form\Extension\Core\Type\SubmitType;
+use App\Form\ContactoType;
 
     class ContactoController extends AbstractController{
         /**
@@ -170,15 +171,8 @@ use Symfony\Component\Form\Extension\Core\Type\SubmitType;
         public function nuevo(ManagerRegistry $doctrine, Request $request){
             $contacto = new Contacto();
 
-            $formulario = $this->createFormBuilder($contacto)
-                ->add('nombre', TextType::class)
-                ->add('telefono', TextType::class)
-                ->add('email', EmailType::class, array('label' => 'Correo electrónico'))
-                ->add('provincia', EntityType::class, array(
-                    'class' => Provincia::class,
-                    'choice_label' => 'nombre',))
-                ->add('save', SubmitType::class, array('label' => 'Enviar'))
-                ->getForm();
+                $formulario = $this->createForm(ContactoType::class, $contacto);
+
                 $formulario->handleRequest($request);
 
                 if ($formulario->isSubmitted() && $formulario->isValid()) {
@@ -201,16 +195,8 @@ use Symfony\Component\Form\Extension\Core\Type\SubmitType;
             $repositorio = $doctrine->getRepository(Contacto::class);
             $contacto = $repositorio->find($codigo);
 
-            $formulario = $this->createFormBuilder($contacto)
-                ->add('nombre', TextType::class)
-                ->add('telefono', TextType::class)
-                ->add('email', EmailType::class, array('label' => 'Correo electrónico'))
-                ->add('provincia', EntityType::class, array(
-                    'class' => Provincia::class,
-                    'choice_label' => 'nombre',))
-                ->add('save', SubmitType::class, array('label' => 'Enviar'))
-                ->getForm();
-
+            $formulario = $this->createForm(ContactoType::class, $contacto);
+            
             $formulario->handleRequest($request);
 
             if ($formulario->isSubmitted() && $formulario->isValid()) {
